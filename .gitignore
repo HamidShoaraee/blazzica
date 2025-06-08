@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+
+# Build outputs
+frontend/build/
+frontend/dist/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+temp/
+tmp/
+
+# Package lock files (optional, but recommended to exclude)
+package-lock.json
