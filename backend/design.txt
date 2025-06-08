@@ -1,0 +1,31 @@
+backend/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   └── supabase.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── user.py
+│   │   ├── service.py
+│   │   └── booking.py
+│   ├── schemas/
+│   │   ├── __init__.py
+│   │   ├── user.py
+│   │   ├── service.py
+│   │   └── booking.py
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── services.py
+│   │   ├── bookings.py
+│   │   ├── providers.py
+│   │   ├── reviews.py
+│   │   └── admin.py
+│   └── utils/
+│       ├── __init__.py
+│       └── helpers.py
+├── .env
+└── requirements.txt
