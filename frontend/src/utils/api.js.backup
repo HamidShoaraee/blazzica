@@ -1,0 +1,399 @@
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8000/api';
+
+// Create axios instance with base URL
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add interceptor to include auth token in requests
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Force normalize role for any provider type
+function normalizeRole(roleValue) {
+  if (!roleValue) return 'client';
+  
+  const rawRole = String(roleValue).toLowerCase();
+  
+  if (rawRole.includes('pending')) {
+    return 'pending_provider';
+  } else if (rawRole.includes('provider') || rawRole === 'provider') {
+    return 'provider';
+  } else if (rawRole === 'admin') {
+    return 'admin';
+  } else {
+    return 'client';
+  }
+}
+
+// Auth API calls
+export const login = async (email, password) => {
+  try {
+    const response = await api.post('/auth/login', { email, password });
+    
+    // Debug: Log raw user data
+    console.log('LOGIN RAW RESPONSE DATA:', response.data);
+    
+    // Force normalize role for any provider type
+    if (response.data.user && response.data.user.role) {
+      response.data.user.role = normalizeRole(response.data.user.role);
+      console.log('NORMALIZED ROLE:', response.data.user.role);
+    }
+    
+    localStorage.setItem('token', response.data.access_token);
+    return response.data;
+  } catch (error) {
+    console.error('Login API error:', error);
+    throw error;
+  }
+};
+
+export const signup = async (userData) => {
+  try {
+    const response = await api.post('/auth/signup', userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const response = await api.get('/auth/me');
+    
+    // Add logging to debug user role issues
+    console.log('CURRENT USER RAW DATA:', response.data);
+    
+    // Force normalize role for any provider type
+    if (response.data && response.data.role) {
+      response.data.role = normalizeRole(response.data.role);
+      console.log('NORMALIZED CURRENT USER ROLE:', response.data.role);
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('getCurrentUser API error:', error);
+    localStorage.removeItem('token');
+    throw error;
+  }
+};
+
+// Service API calls
+export const getServices = async (filters = {}) => {
+  try {
+    const response = await api.get('/services', { params: filters });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getServiceById = async (id) => {
+  try {
+    const response = await api.get(`/services/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Provider API calls
+export const getProviderById = async (id) => {
+  try {
+    const response = await api.get(`/providers/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Provider Profile API calls
+export const getProviderProfile = async (providerId) => {
+  try {
+    console.log('Fetching provider profile for ID:', providerId);
+    const response = await api.get(`/providers/${providerId}`);
+    console.log('Provider profile response:', response.data);
+    
+    // Log availability data specifically
+    if (response.data) {
+      if (response.data.availability) {
+        console.log('Profile has availability data:', response.data.availability);
+      }
+      if (response.data.date_availability) {
+        console.log('Profile has date_availability data:', response.data.date_availability);
+      }
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching provider profile:', error);
+    if (error.response) {
+      console.error('Error response status:', error.response.status);
+      console.error('Error response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+export const createProviderProfile = async (profileData) => {
+  try {
+    console.log('Creating provider profile with data:', profileData);
+    const response = await api.post('/providers', profileData);
+    console.log('Create profile response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating provider profile:', error);
+    if (error.response) {
+      console.error('Error response status:', error.response.status);
+      console.error('Error response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+export const updateProviderProfile = async (profileData) => {
+  try {
+    console.log('Updating provider profile with data:', profileData);
+    
+    // Ensure the availability data is properly included
+    if (profileData.availability) {
+      console.log('Availability data being sent:', profileData.availability);
+    }
+    
+    const response = await api.put('/providers', profileData);
+    console.log('Update profile response:', response.data);
+    
+    // Log whether the returned data includes availability
+    if (response.data.availability) {
+      console.log('Response includes availability:', response.data.availability);
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error updating provider profile:', error);
+    if (error.response) {
+      console.error('Error response status:', error.response.status);
+      console.error('Error response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+// Provider Service API calls
+export const getProviderServices = async (providerId) => {
+  try {
+    // If providerId is provided, use it; otherwise fetch for the current user
+    const endpoint = providerId 
+      ? `/services/provider/${providerId}` 
+      : '/services/provider/me';
+    
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createService = async (serviceData) => {
+  try {
+    console.log('API createService called with data:', serviceData);
+    
+    // Validate that required fields are present
+    const requiredFields = ['title', 'description', 'price', 'category'];
+    const missingFields = requiredFields.filter(field => !serviceData[field] && serviceData[field] !== 0);
+    
+    if (missingFields.length > 0) {
+      console.error('Missing required fields:', missingFields);
+      throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+    }
+    
+    // Ensure price is a valid number
+    if (isNaN(parseFloat(serviceData.price))) {
+      console.error('Invalid price format:', serviceData.price);
+      throw new Error('Price must be a valid number');
+    }
+    
+    // Convert price to number to ensure proper formatting for API
+    serviceData.price = parseFloat(serviceData.price);
+    
+    // Log the request being made
+    console.log('Making request to:', `${API_URL}/services`);
+    console.log('With headers:', {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+    
+    const response = await api.post('/services', serviceData);
+    console.log('Service creation successful, response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Service creation error:', error);
+    
+    // Add detail about the error to make debugging easier
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Status code:', error.response.status);
+      console.error('Headers:', error.response.headers);
+    }
+    
+    throw error;
+  }
+};
+
+export const updateService = async (serviceId, serviceData) => {
+  try {
+    const response = await api.put(`/services/${serviceId}`, serviceData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteService = async (serviceId) => {
+  try {
+    const response = await api.delete(`/services/${serviceId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Provider Booking API calls
+export const getProviderBookings = async (status = null) => {
+  try {
+    let params = {};
+    if (status) {
+      params.status = status;
+    }
+    
+    console.log('API getProviderBookings called with params:', params);
+    console.log('API URL being called:', `${API_URL}/bookings/`, { params });
+    
+    const response = await api.get('/bookings/', { params });
+    
+    console.log('API getProviderBookings response data:', response.data);
+    console.log('API getProviderBookings first item:', response.data?.[0]);
+    
+    // Debug the exact structure of the response
+    if (response.data && response.data.length > 0) {
+      const firstItem = response.data[0];
+      console.log('API response first item keys:', Object.keys(firstItem));
+      console.log('API response first item values for debugging:', {
+        id: firstItem.id,
+        service_title: firstItem.service_title,
+        service_category: firstItem.service_category,
+        client_name: firstItem.client_name,
+        client_email: firstItem.client_email,
+        client_phone: firstItem.client_phone,
+        provider_id: firstItem.provider_id,
+        status: firstItem.status
+      });
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('API getProviderBookings error:', error);
+    throw error;
+  }
+};
+
+export const updateBookingStatus = async (bookingId, status) => {
+  try {
+    const response = await api.put(`/bookings/${bookingId}`, { status });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Booking API calls
+export const createBooking = async (bookingData) => {
+  try {
+    const response = await api.post('/bookings/', bookingData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserBookings = async (userId) => {
+  try {
+    const params = userId ? { userId } : {};
+    const response = await api.get('/bookings/', { params });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const cancelBooking = async (id) => {
+  try {
+    const response = await api.delete(`/bookings/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Get providers that offer a specific service
+export const getProvidersByService = async (serviceName, category = null) => {
+  try {
+    console.log(`Fetching providers for service: "${serviceName}", category: "${category}"`);
+    
+    const params = {};
+    if (serviceName) params.service = serviceName;
+    if (category) params.category = category;
+    
+    console.log('Request params:', params);
+    console.log('Request URL:', `${API_URL}/services/providers`, { params });
+    
+    const response = await api.get('/services/providers', { params });
+    
+    console.log('Providers API response:', response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching providers by service:', error);
+    if (error.response) {
+      console.error('Error response status:', error.response.status);
+      console.error('Error response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+// Get service details by title
+export const getServiceByTitle = async (title) => {
+  try {
+    console.log(`Fetching service details for: "${title}"`);
+    
+    const encodedTitle = encodeURIComponent(title);
+    const response = await api.get(`/services/by-title/${encodedTitle}`);
+    
+    console.log('Service details response:', response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching service by title:', error);
+    if (error.response) {
+      console.error('Error response status:', error.response.status);
+      console.error('Error response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+export default api; 

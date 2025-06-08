@@ -1,0 +1,496 @@
+/* About Us Page Styles */
+
+/* === Variables === */
+:root {
+  --primary-color: #8a00d4;
+  --secondary-color: #4361ee;
+  --accent-color: #f72585;
+  --dark-color: #333333;
+  --light-color: #ffffff;
+  --light-gray: #f9f9f9;
+  --medium-gray: #e0e0e0;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+/* === About Page Layout === */
+.about-page {
+  /* No margin-top needed since navbar is removed */
+}
+
+/* === Hero Section === */
+.about-hero {
+  position: relative;
+  color: var(--light-color);
+  padding: 0;
+  text-align: center;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.about-hero__image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.about-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.about-hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 3;
+}
+
+.about-hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-hero__title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.about-hero__subtitle {
+  font-size: 1.6rem;
+  opacity: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.4;
+  font-weight: 500;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* === Main About Section === */
+.about-main {
+  padding: 100px 0;
+  background: var(--light-color);
+}
+
+.about-main__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.about-main__text {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: var(--dark-color);
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* === Beauty and Wellness Section === */
+.about-beauty {
+  padding: 100px 0;
+  background: var(--light-gray);
+}
+
+.about-beauty__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.about-beauty__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-beauty__text {
+  padding-right: 2rem;
+}
+
+.about-beauty__title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--dark-color);
+}
+
+.about-beauty__subtitle {
+  font-size: 1.4rem;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.about-beauty__description {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #666;
+}
+
+.about-beauty__image {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+}
+
+.about-beauty__image img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.about-beauty__image:hover img {
+  transform: scale(1.05);
+}
+
+/* === Pet Services Section === */
+.about-pets {
+  padding: 100px 0;
+  background: var(--light-color);
+}
+
+.about-pets__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.about-pets__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-pets__text {
+  padding-left: 2rem;
+}
+
+.about-pets__title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--dark-color);
+}
+
+.about-pets__subtitle {
+  font-size: 1.4rem;
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.about-pets__description {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #666;
+}
+
+.about-pets__image {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+}
+
+.about-pets__image img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.about-pets__image:hover img {
+  transform: scale(1.05);
+}
+
+/* === Values Section === */
+.about-values {
+  padding: 100px 0;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--light-color);
+}
+
+.about-values__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.about-values__title {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.about-values__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+}
+
+.about-value {
+  text-align: center;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.about-value:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.about-value__icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.about-value h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--light-color);
+}
+
+.about-value p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* === Responsive Design === */
+@media (max-width: 1200px) {
+  .about-beauty__content,
+  .about-pets__content {
+    gap: 60px;
+  }
+  
+  .about-hero__title {
+    font-size: 3.5rem;
+  }
+  
+  .about-hero__subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .about-beauty__content,
+  .about-pets__content {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .about-beauty__text,
+  .about-pets__text {
+    padding: 0;
+    text-align: center;
+  }
+  
+  .about-hero {
+    min-height: 500px;
+  }
+  
+  .about-hero__title {
+    font-size: 3rem;
+  }
+  
+  .about-hero__subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .about-beauty__title,
+  .about-pets__title {
+    font-size: 2.3rem;
+  }
+  
+  .about-beauty__subtitle,
+  .about-pets__subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .about-values__title {
+    font-size: 2.5rem;
+  }
+  
+  .about-values__grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-hero {
+    min-height: 400px;
+  }
+  
+  .about-hero__container,
+  .about-main__container,
+  .about-beauty__container,
+  .about-pets__container,
+  .about-values__container {
+    padding: 0 20px;
+  }
+  
+  .about-main,
+  .about-beauty,
+  .about-pets,
+  .about-values {
+    padding: 80px 0;
+  }
+  
+  .about-hero__title {
+    font-size: 2.5rem;
+  }
+  
+  .about-hero__subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .about-main__text {
+    font-size: 1.1rem;
+  }
+  
+  .about-beauty__title,
+  .about-pets__title {
+    font-size: 2rem;
+  }
+  
+  .about-beauty__subtitle,
+  .about-pets__subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .about-beauty__description,
+  .about-pets__description {
+    font-size: 1rem;
+  }
+  
+  .about-beauty__image img,
+  .about-pets__image img {
+    height: 300px;
+  }
+  
+  .about-values__title {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .about-value {
+    padding: 2rem;
+  }
+  
+  .about-values__grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-hero {
+    min-height: 350px;
+  }
+  
+  .about-hero__title {
+    font-size: 2rem;
+  }
+  
+  .about-hero__subtitle {
+    font-size: 1.1rem;
+    padding: 0 10px;
+  }
+  
+  .about-main__text {
+    font-size: 1rem;
+  }
+  
+  .about-beauty__title,
+  .about-pets__title {
+    font-size: 1.8rem;
+  }
+  
+  .about-beauty__subtitle,
+  .about-pets__subtitle {
+    font-size: 1rem;
+  }
+  
+  .about-values__title {
+    font-size: 1.8rem;
+  }
+  
+  .about-value {
+    padding: 1.5rem;
+  }
+  
+  .about-value__icon {
+    font-size: 2.5rem;
+  }
+  
+  .about-value h3 {
+    font-size: 1.2rem;
+  }
+  
+  .about-values__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Focus and Accessibility === */
+.about-value:focus-within {
+  outline: 2px solid var(--light-color);
+  outline-offset: 2px;
+}
+
+/* === Print Styles === */
+@media print {
+  .about-hero {
+    background: none !important;
+    color: var(--dark-color) !important;
+  }
+  
+  .about-values {
+    background: none !important;
+    color: var(--dark-color) !important;
+  }
+  
+  .about-value {
+    background: var(--light-gray) !important;
+    color: var(--dark-color) !important;
+  }
+} 
