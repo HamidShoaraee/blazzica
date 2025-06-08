@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      # Remove the PostgreSQL DATABASE_URL since we're using Supabase now
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      # Add JWT secret for additional token verification if needed
+      - JWT_SECRET=${JWT_SECRET}
+      # Frontend URL for CORS
+      - FRONTEND_URL=http://localhost:3000
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend service (if you have one)
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      # Exclude node_modules
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_SUPABASE_URL=${SUPABASE_URL}
+      - REACT_APP_SUPABASE_ANON_KEY=${SUPABASE_KEY}
+      - REACT_APP_API_URL=http://localhost:8000
+    # Adjust this command based on your frontend framework
+    command: npm start
+
+  # Remove the PostgreSQL service since we're using Supabase's hosted database
+
+volumes:
+  # Remove postgres_data volume since we don't need it anymore
+  node_modules: 
