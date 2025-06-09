@@ -105,7 +105,7 @@ pids
 
 # Gatsby files
 .cache/
-public
+
 
 # Vue.js
 .vuepress/dist
