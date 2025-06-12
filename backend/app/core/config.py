@@ -17,6 +17,9 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
+# Frontend configuration
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
 # API configuration
 API_PREFIX = "/api"
 API_VERSION = "0.1.0"
@@ -26,6 +29,7 @@ API_TITLE = "Blazzica API Service"
 CORS_ORIGINS = [
     "http://localhost:3000",  # Frontend dev server
     "https://blazzica.com",   # Production domain
+    FRONTEND_URL,             # Dynamic frontend URL
 ]
 
 class Settings(BaseSettings):
@@ -34,6 +38,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = API_PREFIX
     SUPABASE_URL: str = SUPABASE_URL
     SUPABASE_KEY: str = SUPABASE_KEY
+    FRONTEND_URL: str = FRONTEND_URL
 
     class Config:
         env_file = ".env"

@@ -14,6 +14,7 @@ load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # Address model for Canadian addresses
 class AddressModel(BaseModel):
@@ -157,7 +158,7 @@ async def reset_password(reset_request: PasswordResetRequest):
         response = supabase.auth.reset_password_email(
             reset_request.email,
             {
-                "redirect_to": "http://localhost:3000/reset-password"
+                "redirect_to": f"{FRONTEND_URL}/reset-password"
             }
         )
         

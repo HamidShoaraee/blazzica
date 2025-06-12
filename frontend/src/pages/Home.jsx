@@ -211,8 +211,8 @@ const Home = () => {
           </div>
         </section>
         
-        {/* Services Section - Temporarily commented out */}
-        {/* <section className="page__services services">
+        {/* Services Section */}
+        <section className="page__services services">
           <div className="services__container">
             <motion.h2 
               className="services__title title"
@@ -251,7 +251,7 @@ const Home = () => {
               </div>
             )}
           </div>
-        </section> */}
+        </section>
         
         {/* How It Works Section */}
         <section className="page__how-it-works how-it-works">
