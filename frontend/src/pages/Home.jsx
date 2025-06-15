@@ -94,9 +94,6 @@ const Home = () => {
     // Uncomment to re-enable API fetch
     // fetchData();
   }, []);
-
-
-
   // Callback for booking form interaction
   const handleBookNow = () => {
     // Redirect to booking page or open modal

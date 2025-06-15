@@ -49,3 +49,13 @@ This frontend application connects to the backend API and allows you to test:
 - Booking management
 
 Make sure the backend API is running on http://localhost:8000 before using this frontend. 
+
+
+
+
+backedn configuration: 
+cd ~/blazzica
+pm2 start ecosystem.config.js --only blazzica-backend
+
+pm2 status
+
